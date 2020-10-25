@@ -1,22 +1,26 @@
 <template>
 <div> 
-  <form @submit="processForm($event)">
+  <form @submit="getAsteroidDataByDate($event)">
+  <div class='search_form_inputs'>
   <label for="start_date">Pick a Start Date : </label>
-  <input type="date" v-model="start_date" ><br><br>
+  <input class="asteroid_date_bar" type="date" v-model="start_date" ><br><br>
   <label for="end_date">Pick an End Date : </label>
-  <input type="date" v-model="end_date" ><br><br>
+  <input class="asteroid_date_bar" type="date" v-model="end_date" ><br><br>
   <input type="submit" value="Submit" >
+  </div>
   </form> 
   
     <table id="asteroid_table_by_date">  <tr>
     <th>Asteroid Name</th>
     <th>Asteroid Id</th> 
     <th>NASA JPN URL</th>
+    <th>Closest Approach Date</th>
   </tr>
   <tr v-for="asteroidDataByDate in asteroidDataByDateList" :key="asteroidDataByDate.id">
     <td>{{asteroidDataByDate.name}}</td>
     <td>{{asteroidDataByDate.id}}</td>
-    <td>{{asteroidDataByDate.nasa_jpl_url}}</td>      
+    <td>{{asteroidDataByDate.nasa_jpl_url}}</td>    
+    <td>{{asteroidDataByDate.close_approach_data[0].close_approach_date}}</td>  
   </tr> 
   
 </table>
@@ -36,47 +40,52 @@ export default {
   },
   methods: {
 
-    async processForm (form_event) {
+    async getAsteroidDataByDate (form_event) {
          form_event.preventDefault();        
         const apiKey = 'ydl7nVUxNWm2Vid24ecGBL3L6R6dp8fHXbT4NfZO';              
         try {         
           const response = await fetch(
          `https://api.nasa.gov/neo/rest/v1/feed?start_date=${this.start_date}&end_date=${this.end_date}&api_key=${apiKey}`);
-          const newData =  await response.json();          
-          const near_earth_objects_data = newData.near_earth_objects;
+          const json_data =  await response.json();          
+          const near_earth_objects_data = json_data.near_earth_objects; 
+          const finalAsteroidDataByDate =[]; 
 
-           console.log('final', near_earth_objects_data);
-            const  finalAsteroidDataByDate =[];
-              for(var i=0;i<10;i++)
-              {
-                finalAsteroidDataByDate.push(near_earth_objects_data[i]);
+            for(var p in near_earth_objects_data){              
+              for(var q=0;q<near_earth_objects_data[p].length;q++)
+                {
+                  finalAsteroidDataByDate.push(near_earth_objects_data[p][q]);                
+                }
               }
-             this.asteroidDataByDateList = finalAsteroidDataByDate;
-            
-             
-           
-           } 
-       catch (error) {    
-          console.log('error');
-         }   
 
-    }
+               for(var i=0;i<10;i++)
+              {
+                this.asteroidDataByDateList.push(finalAsteroidDataByDate[i]);
+              }
+             
+           } 
+          catch (error) {    
+              console.log('error');
+            }   
+        
+        }
  
   }
 };
 </script>
 <style scoped>
 
-.search_form {
+.search_form_inputs {
    margin-top: auto;
    margin-right: auto;
    margin-left: auto;
    padding-top: 10px;
    border : 1px solid black;
    width:55%;
-   height:200px;
+   height:150px;
    padding-top: 30px;
-  
+   }
+   .asteroid_date_bar {
+       height:40px;
    }
 label  {
     font-size:25px

@@ -1,7 +1,9 @@
 <template>
-<div class>
- <h2>NASA Asteroid Information</h2>
-<p>Click on the Below Menu Items to see relevant data</p>
+<div class="asteroid_display_class">
+  <div class="title_information">
+   <h1>NASA ASTEROID INFORMATION</h1>
+   <p>Click on the Below Menu Items to see relevant data</p>
+ </div>
 
 <div class="tab">
   <button class="tablinks" v-on:click="openTab($event,'asteroid_display')" id="defaultOpen">Top 10 Asteroids Display</button>
@@ -9,24 +11,26 @@
   <button class="tablinks" v-on:click="openTab($event, 'search_by_id')">Search Asteroids by ID</button>
 </div>
         <div id="asteroid_display" class="tabcontent">  
-        <Asteroid />
+        <AsteroidDisplay />
         </div>
         <div id="search_by_date" class="tabcontent"> 
         <AsteroidSearchByDate />     
         </div>
         <div id="search_by_id" class="tabcontent"> 
-        <h3>Tokyo</h3>        
+        <AsteroidSearchById />        
         </div>
 </div>
 </template>
 <script>
-import Asteroid from './Asteroid'
+import AsteroidDisplay from './AsteroidDisplay'
 import AsteroidSearchByDate from './AsteroidSearchByDate'
+import AsteroidSearchById from './AsteroidSearchById'
 export default {
   name: "DataTabs" ,
   components: {
-    Asteroid,
-    AsteroidSearchByDate
+    AsteroidDisplay,
+    AsteroidSearchByDate,
+    AsteroidSearchById
   },
   methods : {
       openTab (evt, tabName) {
@@ -49,6 +53,18 @@ export default {
 <style scoped>
   body {font-family: Arial;}
 
+ .asteroid_display_class {
+   border :10px solid green;
+ }
+
+ .title_information {
+   border-bottom :10px solid green;;
+ }
+
+h1 {
+   color: blue;
+ }
+
 /* Style the tab */
 .tab {
   overflow: hidden;
@@ -56,7 +72,8 @@ export default {
  background-color: #f1f1f1;
   margin-left: auto;
   margin-right: auto;
-  width:50%;
+  width:80%;
+  border-bottom: 1px solid green;
 }
 
 /* Style the buttons inside the tab */
@@ -67,7 +84,7 @@ export default {
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
-  font-size: 17px;
+  font-size: 30px;
   width:30%;
  
 }
