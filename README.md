@@ -1,4 +1,4 @@
-# weather-json
+# asteroid-json
 
 ## Project setup
 ```
